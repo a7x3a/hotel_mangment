@@ -1,0 +1,117 @@
+ How to Use This Database
+1️⃣ Insert Admin and Cashier Users
+Admins and cashiers should be created in the Users table.
+
+sql
+Copy
+Edit
+INSERT INTO Users (name, email, password, role) VALUES
+('John Admin', 'admin@example.com', 'hashed_password', 'Admin'),
+('Alice Cashier', 'cashier@example.com', 'hashed_password', 'Cashier');
+Admins can:
+✅ Manage cashiers and rooms
+✅ Act as a cashier (handle guests, reservations, and payments)
+
+Cashiers can:
+✅ Handle guests, reservations, and payments
+
+2️⃣ Add a New Guest
+sql
+Copy
+Edit
+INSERT INTO Guest (name, phone, email) VALUES
+('Michael Smith', '1234567890', 'michael@example.com');
+3️⃣ Add Rooms to the System
+sql
+Copy
+Edit
+INSERT INTO Room (room_number, room_type, price, status) VALUES
+('101', 'Single', 100.00, 'Available'),
+('102', 'Double', 150.00, 'Available');
+4️⃣ Reserve a Room for a Guest
+When a guest wants to book a room, a cashier will make a reservation.
+
+sql
+Copy
+Edit
+INSERT INTO Reservation (guest_id, user_id, room_id, check_in, check_out, total_price, status) 
+VALUES (1, 2, 1, '2025-03-07 14:00:00', '2025-03-10 12:00:00', 300.00, 'Confirmed');
+👤 Guest: Michael Smith (ID: 1)
+💳 Cashier: Alice Cashier (ID: 2)
+🏨 Room: 101 (ID: 1)
+📆 Check-in: March 7, 2025, 2:00 PM
+📆 Check-out: March 10, 2025, 12:00 PM
+💰 Total Price: $300
+
+The room status should now be updated to 'Reserved':
+
+sql
+Copy
+Edit
+UPDATE Room SET status = 'Reserved' WHERE room_id = 1;
+5️⃣ Process Guest Payment
+When the guest pays, store the payment details.
+
+sql
+Copy
+Edit
+INSERT INTO Payment (reservation_id, amount_paid) VALUES (1, 300.00);
+After payment, update the reservation status:
+
+sql
+Copy
+Edit
+UPDATE Reservation SET status = 'Confirmed' WHERE reservation_id = 1;
+If the guest checks out, update the room status:
+
+sql
+Copy
+Edit
+UPDATE Room SET status = 'Available' WHERE room_id = 1;
+🔍 Queries to Fetch Data
+1️⃣ Get All Guests and Their Reservations
+sql
+Copy
+Edit
+SELECT Guest.name, Room.room_number, Reservation.check_in, Reservation.check_out, Reservation.status 
+FROM Reservation
+JOIN Guest ON Reservation.guest_id = Guest.guest_id
+JOIN Room ON Reservation.room_id = Room.room_id;
+2️⃣ Get All Payments
+sql
+Copy
+Edit
+
+SELECT Guest.name, Room.room_number, Payment.amount_paid, Payment.payment_date
+FROM Payment
+JOIN Reservation ON Payment.reservation_id = Reservation.reservation_id
+JOIN Guest ON Reservation.guest_id = Guest.guest_id
+JOIN Room ON Reservation.room_id = Room.room_id;
+
+3️⃣ Get Total Revenue
+sql
+Copy
+Edit
+
+SELECT SUM(amount_paid) AS total_revenue FROM Payment;
+
+🚀 Summary
+Users Table: Stores Admins & Cashiers
+Guest Table: Stores guest details
+Room Table: Manages room availability
+Reservation Table: Tracks guest bookings
+Payment Table: Records payments
+💡 Benefits of This Approach
+✔️ Admins and Cashiers use the same Users table (simpler role management)
+✔️ Cashiers handle guests, reservations, and payments
+✔️ Admins can manage rooms and cashiers
+✔️ Room availability updates dynamically
+
+Would you like help setting up the authentication system for users? 😊
+
+
+
+
+
+
+

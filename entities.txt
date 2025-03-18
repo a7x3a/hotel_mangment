@@ -1,0 +1,5 @@
+Users [user_id, name, username, password, role]  
+Guest [guest_id, name, phone, document_type, document_number]  
+Room [room_id, room_number, room_type, price, status]  
+Reservation [reservation_id, guest_id, user_id, room_id, check_in, check_out, total_price, status]  
+Payment [payment_id, reservation_id, amount_paid, payment_date]  
