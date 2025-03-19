@@ -6,6 +6,6 @@ const verifyToken = require('../middlewares/auth')
 //Private Routes
 router.get('/',verifyToken,paymentController.getAllPayments);
 router.get('/:id',verifyToken,paymentController.getPaymentById);
-router.post('/createPayment',verifyToken,paymentController.createPayment);
+router.post('/create',verifyToken,paymentController.createPayment);
 
 module.exports = router ;

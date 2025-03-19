@@ -1,4 +1,4 @@
-const User = require('../schema/models/users');
+const { User } = require('../schema/index');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -9,13 +9,16 @@ exports.registerUser = async (req, res) => {
             return res.status(500).json({ message: "already in" });
         }
         const { name, username, password, role } = req.body;
+        if(!name || !username || !password || !role){
+            return res.status(400).json({ message: "All fields are required" });
+        }
         const existingUser = await User.findOne({ where: { username } });
         if (existingUser) return res.status(400).json({ message: 'username already exists' });
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({ name, username, password: hashedPassword, role });
-        res.status(201).json({ message: 'user registered successfully', user });
+        return res.status(201).json({ message: 'user registered successfully', user });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -26,7 +29,10 @@ exports.loginUser = async (req, res) => {
             return res.status(500).json({ message: "already in" });
         }
         const { username, password } = req.body;
-                const user = await User.findOne({ where: { username } });
+        if(!username || !password){
+            return res.status(400).json({ message: "All fields are required" });
+        }
+        const user = await User.findOne({ where: { username } });
         if (!user) return res.status(400).json({ message: 'Invalid username or password' });
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: 'Invalid username or password' });
@@ -39,9 +45,9 @@ exports.loginUser = async (req, res) => {
             httpOnly: true, 
             maxAge: 24 * 60 * 60 * 1000 // Cookie expires in 1 day
         });
-        res.status(200).json({ message: 'login successful' });
+        return res.status(200).json({ message: 'login successful' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -49,9 +55,13 @@ exports.loginUser = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.findAll();
-        res.status(200).json(users);
+        if(users.length > 0){
+            return res.status(200).json(users);
+        }else{
+            return res.status(404).json({message : 'no user records found!'})
+        }    
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -60,10 +70,9 @@ exports.getUserById = async (req, res) => {
     try {
         const user = await User.findByPk(req.params.id);
         if (!user) return res.status(404).json({ message: 'user not found' });
-
-        res.status(200).json(user);
+        return res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -74,9 +83,9 @@ exports.updateUser = async (req, res) => {
         const user = await User.findByPk(req.params.id);
         if (!user) return res.status(404).json({ message: 'user not found' });
         await user.update({ name, username, role });
-        res.status(200).json({ message: 'user updated successfully', user });
+        return res.status(200).json({ message: 'user updated successfully', user });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -86,9 +95,9 @@ exports.deleteUser = async (req, res) => {
         const user = await User.findByPk(req.params.id);
         if (!user) return res.status(404).json({ message: 'user not found' });
         await user.destroy();
-        res.status(200).json({ message: 'user deleted successfully' });
+        return res.status(200).json({ message: 'user deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -96,8 +105,8 @@ exports.deleteUser = async (req, res) => {
 exports.logoutUser = async (req, res) => {
     try {
         res.clearCookie('session_token');
-        res.status(200).json({ message: 'logged out successfully' });
+        return res.status(200).json({ message: 'logged out successfully' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 }

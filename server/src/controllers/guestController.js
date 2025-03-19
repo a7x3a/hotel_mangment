@@ -1,15 +1,21 @@
-const Guest = require('../schema/models/guests')
+const { Guest } = require('../schema/index');
 
 //Get All of The Guests
 exports.getAllGuests = async (req, res) => {
     try {
         const guests = await Guest.findAll();
-        res.status(200).json(guests);
+        if (guests.length > 0) {
+            return res.status(200).json(guests);
+        } else {
+            return res.status(404).json({ message: 'No guest records found!' });
+        }
+
     } catch (error) {
         console.error("Error fetching guests:", error);
-        res.status(500).json({ message: "Error fetching guests", error });
+        return res.status(500).json({ message: "Error fetching guests", error });
     }
-}
+};
+
 
 //Delete a Guest By Its ID
 exports.deleteGuestById = async (req, res) => {
@@ -18,13 +24,13 @@ exports.deleteGuestById = async (req, res) => {
         const guest = await Guest.findByPk(id);
         if (guest) {
             await guest.destroy();
-            res.status(200).json({ message: 'guest deleted successfully' });
+            return res.status(200).json({ message: 'guest deleted successfully' });
         } else {
-            res.status(404).json({ message: 'guest not found' });
+            return res.status(404).json({ message: 'guest not found' });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error deleting guest' });
+        return res.status(500).json({ message: 'Error deleting guest' });
     }
 }
 
@@ -34,13 +40,13 @@ exports.getUserById = async (req, res) => {
     try {
         const guest = await Guest.findByPk(id);
         if (guest) {
-            res.json(guest)
+            return res.status(200).json(guest)
         } else {
-            res.status(404).json({ message: 'user not found!' })
+            return res.status(404).json({ message: 'user not found!' })
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error fetching guest' });
+        return res.status(500).json({ message: 'Error fetching guest' });
     }
 }
 
@@ -50,10 +56,10 @@ exports.createGuest = async (req, res) => {
     const { name, phone, document_type, document_number } = req.body;
     try {
         const newGuest = await Guest.create({ name, phone, document_type, document_number });
-        res.status(201).json(newGuest);
+        return res.status(201).json(newGuest);
     } catch (error) {
         console.error("Error creating guest:", error);
-        res.status(500).json({ message: "Error creating guest", error });
+        return res.status(500).json({ message: "Error creating guest", error });
     }
 }
 
@@ -70,12 +76,12 @@ exports.updateGuest = async (req, res) => {
             guest.document_number = document_number || guest.document_number;
 
             await guest.save();
-            res.status(200).json(guest);
+            return res.status(200).json(guest);
         } else {
-            res.status(404).json({ message: 'Guest not found' });
+            return res.status(404).json({ message: 'Guest not found' });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error updating guest' });
+        return res.status(500).json({ message: 'Error updating guest' });
     }
 };

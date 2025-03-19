@@ -25,8 +25,8 @@ const User = db.define('User', {
         allowNull: false
     }
 }, {
-    tableName: 'Users', // Explicitly setting table name to match SQL schema
-    timestamps: false // Disable `createdAt` and `updatedAt` fields if not needed
+    tableName: 'Users', 
+    timestamps: false 
 });
 
 

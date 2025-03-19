@@ -1,9 +1,9 @@
 const db = require('../config/database');
-const User = require('./models/users'); // Import the User model
-const Guest = require('./models/guests'); // Import the Guest model
-const Room = require('./models/room'); // Import the Room model
-const Reservation = require('./models/reservation'); // Import the Reservation model
-const Payment = require('./models/payment'); // Import the Payment model
+const User = require('./models/users'); 
+const Guest = require('./models/guests'); 
+const Room = require('./models/room');
+const Reservation = require('./models/reservation');
+const Payment = require('./models/payment'); 
 
 // Sync all models
 const syncModels = async () => {
