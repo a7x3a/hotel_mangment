@@ -3,12 +3,12 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const chalk = require('chalk');
-require('./schema');;//index-schema is the file that contains all the models
+require('./schema');;//index-schema is the file that contains all the schemas
 const userRoutes = require('./routes/userRoutes');
 const guestRoutes = require('./routes/guestRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');  
 const roomRoutes = require('./routes/roomRoutes');
-const reservationRoutes = require('./routes/ReservationRoutes');
+const reservationRoutes = require('./routes/reservationRoutes');
 
 // Load environment variables
 dotenv.config();
