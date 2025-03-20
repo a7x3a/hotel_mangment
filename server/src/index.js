@@ -3,7 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const chalk = require('chalk');
-require('./schema');;//index-schema is the file that contains all the schemas
+require('./schema');;//index-schema is the file that contains all the models
 const userRoutes = require('./routes/userRoutes');
 const guestRoutes = require('./routes/guestRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');  
