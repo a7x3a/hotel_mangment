@@ -5,7 +5,7 @@ const { Reservation } = require('../schema/index');
 exports.getAllReservations = async (req, res) => {
     try {
         const reservations = await Reservation.findAll();
-        if (reservations.length > 0) {
+        if(reservations.length > 0) {
             res.status(200).json(reservations); // Send all reservations in response
         } else {
             res.status(404).json({ message: 'No reservations found!' }); // No records found
@@ -48,7 +48,7 @@ exports.deleteReservationById = async (req, res) => {
     }
 };
 
-//........
+//Create New Reservation
 exports.createReservation = async (req, res) => {
     const {
         guest_id,
@@ -96,14 +96,14 @@ exports.createReservation = async (req, res) => {
             status
         });
 
-        res.status(201).json({ message: "Reservation created successfully!", reservation: newReservation });
+        return res.status(201).json({ message: "Reservation created successfully!", reservation: newReservation });
     } catch (error) {
         console.error("Error creating reservation:", error);
-        res.status(500).json({ message: "Error creating reservation", error });
+        return res.status(500).json({ message: "Error creating reservation", error });
     }
 };
 
-//.....
+//Update Reservation Based On Its ID
 exports.updateReservationById = async (req, res) => {
     const { id } = req.params;
     const { check_in, check_out, start_from, total_price, status } = req.body;
