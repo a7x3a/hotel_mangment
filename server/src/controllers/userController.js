@@ -26,30 +26,48 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
     try {
         if (req.cookies.session_token) {
-            return res.status(500).json({ message: "already in" });
+            return res.status(500).json({ message: "Already logged in" });
         }
+
         const { username, password } = req.body;
-        if(!username || !password){
+        if (!username || !password) {
             return res.status(400).json({ message: "All fields are required" });
         }
+
         const user = await User.findOne({ where: { username } });
         if (!user) return res.status(400).json({ message: 'Invalid username or password' });
+
+        // Compare password with hashed password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: 'Invalid username or password' });
+
+        // Generate JWT token
         const token = jwt.sign(
             { id: user.user_id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
+
+        // Remove password from the user object
+        const { password: _, ...userWithoutPassword } = user.dataValues;
+
+        // Set the cookie and send the response without the password
         res.cookie('session_token', token, {
             httpOnly: true, 
             maxAge: 24 * 60 * 60 * 1000 // Cookie expires in 1 day
         });
-        return res.status(200).json({ message: 'login successful' });
+
+        return res.status(200).json({
+            message: 'Login successful',
+            user: userWithoutPassword,  // Send the user object without the password
+            token
+        });
+
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
 };
+
 
 // Get all users
 exports.getAllUsers = async (req, res) => {

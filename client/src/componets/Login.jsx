@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/userContext";
+import { loginUser } from "../utils/routes/users";
 
 const Login = () => {
-  const navigate = useNavigate()
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+  const { setUser } = useContext(UserContext);
+  const usernameRef = useRef(null);
+  const passwordRef = useRef(null);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login attempt:', formData);
-    navigate('/')
-  };
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    try {
+      const username = usernameRef.current.value;
+      const password = passwordRef.current.value;
+      const response = await loginUser(username, password);
+      // Save user & token to localStorage
+      localStorage.setItem("user", JSON.stringify(response.user));
+      localStorage.setItem("token", response.token);
+      setUser(response.user);
+      navigate("/");
+    } catch (error) {
+      setError(error?.response?.data?.message || "An error occurred");
+    }
   };
 
   return (
@@ -28,28 +33,21 @@ const Login = () => {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-              start your 14-day free trial
-            </a>
-          </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
+              <label htmlFor="username" className="sr-only">
+                Username
               </label>
               <input
-                id="email"
-                name="email"
-                type="email"
+                id="username"
+                name="username"
+                type="text"
                 required
+                ref={usernameRef}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={formData.email}
-                onChange={handleChange}
+                placeholder="Username"
               />
             </div>
             <div>
@@ -61,10 +59,9 @@ const Login = () => {
                 name="password"
                 type="password"
                 required
+                ref={passwordRef}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
               />
             </div>
           </div>
@@ -81,7 +78,6 @@ const Login = () => {
                 Remember me
               </label>
             </div>
-
             <div className="text-sm">
               <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
                 Forgot your password?
@@ -97,9 +93,9 @@ const Login = () => {
               Sign in
             </button>
           </div>
-
-    
         </form>
+
+        {error && <div className="text-red-500 text-center capitalize">{error}</div>}
       </div>
     </div>
   );
