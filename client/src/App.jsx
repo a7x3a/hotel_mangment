@@ -6,6 +6,8 @@ import Admin from "./componets/Admin";
 import PublicRoute from "./routes/PublicRoutes";
 import ProtectedRoute from "./routes/ProtectedRoutes";
 import { UserContext } from "./context/userContext";
+import Layout from "./componets/Layout";
+import Rooms from "./componets/Rooms";
 
 const App = () => {
   const { user } = useContext(UserContext);
@@ -18,11 +20,19 @@ const App = () => {
           <Route path="/login" element={<Login />} />
         </Route>
 
-        {/* Protected Routes (Dashboard or Admin based on user role) */}
+        {/* Protected Routes Wrapped in Layout */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={user?.role === "Admin" ? <Admin /> : <Dashboard />} />
+          <Route element={<Layout />}>
+            <Route path="/" element={user?.role === "Admin" ? <Admin /> : <Dashboard />} />
+          </Route>
         </Route>
 
+        {/* Protected Routes Wrapped in Layout */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<Layout />}>
+            <Route path="/rooms" element={<Rooms />} />
+          </Route>
+        </Route>
         {/* Catch-All Route (Redirect unknown routes) */}
         <Route
           path="*"
