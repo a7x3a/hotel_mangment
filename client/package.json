@@ -11,14 +11,15 @@
   },
   "dependencies": {
     "@fontsource/roboto": "^5.2.5",
-    "@material-tailwind/react": "^3.0.0-beta.24",
-    "@tailwindcss/vite": "^4.0.9",
+    "@heroicons/react": "^2.2.0",
+    "@material-tailwind/react": "^2.1.10",
+    "@tailwindcss/vite": "^4.0.6",
     "axios": "^1.8.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.2.0",
     "styled-components": "^6.1.16",
-    "tailwindcss": "^4.0.9"
+    "tailwindcss": "^4.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
