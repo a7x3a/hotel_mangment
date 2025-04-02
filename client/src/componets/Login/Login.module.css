@@ -1,0 +1,23 @@
+.wrapper { 
+    min-height: 100dvh;
+    background-size: cover; 
+    background-image: url(https://img.freepik.com/free-photo/luxury-hotel-reception-hall-lounge-restaurant-with-high-ceiling_105762-1771.jpg?t=st=1743622848~exp=1743626448~hmac=d5a9c0c7a9b7faf1813416cd258ec898451a5d2119683bc127b7357f45939aff&w=1380);
+  }
+  
+  .form {
+    border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
+    min-height: 100dvh;
+    max-width: 450px;
+    padding-top: 80px;
+  
+    @media (max-width: var(--mantine-breakpoint-md)) {
+      max-width: 100%;
+    }
+  }
+  
+  .title {
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+    font-family:
+      Greycliff CF,
+      var(--mantine-font-family);
+  }

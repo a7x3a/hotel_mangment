@@ -10,15 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fontsource/roboto": "^5.2.5",
-    "@heroicons/react": "^2.2.0",
-    "@material-tailwind/react": "^2.1.10",
+    "@mantine/core": "^7.17.3",
+    "@mantine/hooks": "^7.17.3",
+    "@mantinex/mantine-logo": "^1.1.0",
+    "@tabler/icons-react": "^3.31.0",
     "@tailwindcss/vite": "^4.0.6",
     "axios": "^1.8.4",
+    "dayjs": "^1.11.13",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.2.0",
-    "styled-components": "^6.1.16",
     "tailwindcss": "^4.0.6"
   },
   "devDependencies": {
@@ -30,6 +31,9 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
+    "postcss": "^8.5.3",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
     "vite": "^6.2.0"
   }
 }

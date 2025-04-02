@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./componets/Login";
-import Dashboard from "./componets/Dashboard";
+import Login from "./componets/Login/Login";
+import {Dashboard} from "./componets/Dashboard/Dashboard";
 import Admin from "./componets/Admin";
 import PublicRoute from "./routes/PublicRoutes";
 import ProtectedRoute from "./routes/ProtectedRoutes";

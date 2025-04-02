@@ -1,0 +1,45 @@
+/* Sidebar navbar styles */
+.navbar {
+  width: 80px; /* Set the sidebar width */
+  height: 100vh; /* Full screen height */
+  padding: var(--mantine-spacing-md); /* Padding from Mantine's design system */
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  border-right: 1px solid var(--mantine-color-gray-3); /* Border for the sidebar */
+  @apply fixed z-100;
+}
+
+.navbarMain {
+  flex: 1;
+  margin-top: 50px; /* Space at the top of the main section */
+}
+
+/* Link button styles inside the navbar */
+.link {
+  width: 50px; /* Width of each link button */
+  height: 50px; /* Height of each link button */
+  border-radius: var(--mantine-radius-md); /* Rounded corners using Mantine's radius variable */
+  display: flex;
+  align-items: center; /* Center icons vertically */
+  justify-content: center; /* Center icons horizontally */
+  color: var(--mantine-color-gray-7); /* Default text color for the links */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transitions for hover effect */
+}
+
+/* Link hover styles */
+.link:hover {
+  background-color: var(--mantine-color-gray-0); /* Background color on hover */
+  color: var(--mantine-color-dark-0); /* Change text color on hover */
+}
+
+/* Active link styles */
+.link[data-active] {
+  background-color: var(--mantine-color-blue-light); /* Background color for active state */
+  color: var(--mantine-color-blue-light-color); /* Text color for active link */
+}
+
+/* Active link hover styles */
+.link[data-active]:hover {
+  background-color: var(--mantine-color-blue-light); /* Keep the same active background color */
+  color: var(--mantine-color-blue-light-color); /* Keep the same active text color */
+}
