@@ -1,21 +1,35 @@
-import { createContext, useState, useEffect } from "react";
+// context/userContext.js
+import { createContext, useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const [user, setUser] = useState(null);
 
-    // Load user from localStorage when the app starts
-    useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-    }, []);
+  // Initialize user from cookies on first load
+  useEffect(() => {
+    if (cookies.user) {
+      setUser(cookies.user);
+    }
+  }, []);
 
-    return (
-        <UserContext.Provider value={{ user, setUser }}>
-            {children}
-        </UserContext.Provider>
-    );
+  const updateUser = (userData, remember = false) => {
+    setUser(userData);
+    // Set cookie with expiration (7 days if remember, session otherwise)
+    const options = remember ? { maxAge: 60 * 60 * 24 * 7 } : {};
+    setCookie('user', userData, options);
+  };
+
+  const logout = () => {
+    setUser(null);
+    removeCookie('user');
+  };
+
+  return (
+    <UserContext.Provider value={{ user, setUser: updateUser, logout }}>
+      {children}
+    </UserContext.Provider>
+  );
 };

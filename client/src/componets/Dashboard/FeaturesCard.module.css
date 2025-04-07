@@ -3,7 +3,6 @@
   }
   
   .imageSection {
-    padding: var(--mantine-spacing-md);
     display: flex;
     align-items: center;
     justify-content: center;

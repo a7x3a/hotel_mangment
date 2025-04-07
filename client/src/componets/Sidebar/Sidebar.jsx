@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../../utils/routes/users';
 import { Center, Stack, Tooltip, UnstyledButton, Loader } from '@mantine/core'; // Added Loader
 import classes from './Sidebar.module.css';
+import { useCookies } from 'react-cookie';
 
 function NavbarLink({ icon: Icon, label, active, onClick }) {
   return (
@@ -41,11 +42,13 @@ export function Sidebar() {
   const {setUser} = useContext(UserContext); // Assuming you have a UserContext to manage user state
   const [loading, setLoading] = useState(false);  // State for loading spinner
   const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
 
   const handleLogout = () => {
     setLoading(true);  // Start loading before the API call
     logoutUser()
       .then(() => {
+        removeCookie('user');  // Remove user cookie
         setUser(null);  // Update user state in context
         setLoading(false);  // Stop loading after the API call succeeds
         navigate('/login');

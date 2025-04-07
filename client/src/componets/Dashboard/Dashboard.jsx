@@ -19,258 +19,270 @@ export function Dashboard() {
 
   return (
     <div className='h-fit grid sm:grid-cols-2 grid-rows-1 gap-2 p-4'> 
-      <Card withBorder radius="md" className={classes.card}>
-      <Card.Section className={classes.imageSection}>
-        <Image src="https://i.imgur.com/ZL52Q2D.png" alt="Tesla Model S" />
-      </Card.Section>
+     <Card withBorder radius="md" className={classes.card}>
+  <Card.Section className={classes.imageSection}>
+    <Image src="https://img.freepik.com/free-photo/room-interior-hotel-bedroom_23-2150683419.jpg?t=st=1744066527~exp=1744070127~hmac=124fc2cc62794e1f3d39d01e6919ac7d6d0d50df8202b695bb56813f36ee175a&w=1380" alt="Luxury Hotel Room" />
+  </Card.Section>
 
-      <Group justify="space-between" mt="md">
-        <div>
-          <Text fw={500}>Tesla Model S</Text>
-          <Text fz="xs" c="dimmed">
-            Free recharge at any station
-          </Text>
-        </div>
-        <Badge variant="outline">25% off</Badge>
-      </Group>
+  <Group justify="space-between" mt="md">
+    <div>
+      <Text fw={500}>Deluxe King Room</Text>
+      <Text fz="xs" c="dimmed">
+        Room ID: #305
+      </Text>
+    </div>
+    <Badge variant="outline">15% off</Badge>
+  </Group>
 
-      <Card.Section className={classes.section} mt="md">
-        <Text fz="sm" c="dimmed" className={classes.label}>
-          Basic configuration
+  <Card.Section className={classes.section} mt="md">
+    <Text fz="sm" c="dimmed" className={classes.label}>
+      Room features
+    </Text>
+
+    <Group gap={8} mb={-8}>
+      <Badge variant="light">King Bed</Badge>
+      <Badge variant="light">Ocean View</Badge>
+      <Badge variant="light">Free WiFi</Badge>
+    </Group>
+  </Card.Section>
+
+  <Card.Section className={classes.section}>
+    <Group gap={30}>
+      <div>
+        <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
+          $249.00
         </Text>
-
-        <Group gap={8} mb={-8}>
-          {features}
-        </Group>
-      </Card.Section>
-
-      <Card.Section className={classes.section}>
-        <Group gap={30}>
-          <div>
-            <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
-              $168.00
-            </Text>
-            <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
-              per day
-            </Text>
-          </div>
-
-          <Button radius="xl" style={{ flex: 1 }}>
-            Rent now
-          </Button>
-        </Group>
-      </Card.Section>
-    </Card>
-    <Card withBorder radius="md" className={classes.card}>
-      <Card.Section className={classes.imageSection}>
-        <Image src="https://i.imgur.com/ZL52Q2D.png" alt="Tesla Model S" />
-      </Card.Section>
-
-      <Group justify="space-between" mt="md">
-        <div>
-          <Text fw={500}>Tesla Model S</Text>
-          <Text fz="xs" c="dimmed">
-            Free recharge at any station
-          </Text>
-        </div>
-        <Badge variant="outline">25% off</Badge>
-      </Group>
-
-      <Card.Section className={classes.section} mt="md">
-        <Text fz="sm" c="dimmed" className={classes.label}>
-          Basic configuration
+        <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
+          per night
         </Text>
+      </div>
 
-        <Group gap={8} mb={-8}>
-          {features}
-        </Group>
-      </Card.Section>
+      <Button radius="xl" style={{ flex: 1 }}>
+        Book now
+      </Button>
+    </Group>
+  </Card.Section>
+</Card>
+<Card withBorder radius="md" className={classes.card}>
+  <Card.Section className={classes.imageSection}>
+    <Image src="https://img.freepik.com/free-photo/room-interior-hotel-bedroom_23-2150683419.jpg?t=st=1744066527~exp=1744070127~hmac=124fc2cc62794e1f3d39d01e6919ac7d6d0d50df8202b695bb56813f36ee175a&w=1380" alt="Luxury Hotel Room" />
+  </Card.Section>
 
-      <Card.Section className={classes.section}>
-        <Group gap={30}>
-          <div>
-            <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
-              $168.00
-            </Text>
-            <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
-              per day
-            </Text>
-          </div>
+  <Group justify="space-between" mt="md">
+    <div>
+      <Text fw={500}>Deluxe King Room</Text>
+      <Text fz="xs" c="dimmed">
+        Room ID: #305
+      </Text>
+    </div>
+    <Badge variant="outline">15% off</Badge>
+  </Group>
 
-          <Button radius="xl" style={{ flex: 1 }}>
-            Rent now
-          </Button>
-        </Group>
-      </Card.Section>
-    </Card>
-    <Card withBorder radius="md" className={classes.card}>
-      <Card.Section className={classes.imageSection}>
-        <Image src="https://i.imgur.com/ZL52Q2D.png" alt="Tesla Model S" />
-      </Card.Section>
+  <Card.Section className={classes.section} mt="md">
+    <Text fz="sm" c="dimmed" className={classes.label}>
+      Room features
+    </Text>
 
-      <Group justify="space-between" mt="md">
-        <div>
-          <Text fw={500}>Tesla Model S</Text>
-          <Text fz="xs" c="dimmed">
-            Free recharge at any station
-          </Text>
-        </div>
-        <Badge variant="outline">25% off</Badge>
-      </Group>
+    <Group gap={8} mb={-8}>
+      <Badge variant="light">King Bed</Badge>
+      <Badge variant="light">Ocean View</Badge>
+      <Badge variant="light">Free WiFi</Badge>
+    </Group>
+  </Card.Section>
 
-      <Card.Section className={classes.section} mt="md">
-        <Text fz="sm" c="dimmed" className={classes.label}>
-          Basic configuration
+  <Card.Section className={classes.section}>
+    <Group gap={30}>
+      <div>
+        <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
+          $249.00
         </Text>
-
-        <Group gap={8} mb={-8}>
-          {features}
-        </Group>
-      </Card.Section>
-
-      <Card.Section className={classes.section}>
-        <Group gap={30}>
-          <div>
-            <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
-              $168.00
-            </Text>
-            <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
-              per day
-            </Text>
-          </div>
-
-          <Button radius="xl" style={{ flex: 1 }}>
-            Rent now
-          </Button>
-        </Group>
-      </Card.Section>
-    </Card>
-    <Card withBorder radius="md" className={classes.card}>
-      <Card.Section className={classes.imageSection}>
-        <Image src="https://i.imgur.com/ZL52Q2D.png" alt="Tesla Model S" />
-      </Card.Section>
-
-      <Group justify="space-between" mt="md">
-        <div>
-          <Text fw={500}>Tesla Model S</Text>
-          <Text fz="xs" c="dimmed">
-            Free recharge at any station
-          </Text>
-        </div>
-        <Badge variant="outline">25% off</Badge>
-      </Group>
-
-      <Card.Section className={classes.section} mt="md">
-        <Text fz="sm" c="dimmed" className={classes.label}>
-          Basic configuration
+        <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
+          per night
         </Text>
+      </div>
 
-        <Group gap={8} mb={-8}>
-          {features}
-        </Group>
-      </Card.Section>
+      <Button radius="xl" style={{ flex: 1 }}>
+        Book now
+      </Button>
+    </Group>
+  </Card.Section>
+</Card>
+<Card withBorder radius="md" className={classes.card}>
+  <Card.Section className={classes.imageSection}>
+    <Image src="https://img.freepik.com/free-photo/room-interior-hotel-bedroom_23-2150683419.jpg?t=st=1744066527~exp=1744070127~hmac=124fc2cc62794e1f3d39d01e6919ac7d6d0d50df8202b695bb56813f36ee175a&w=1380" alt="Luxury Hotel Room" />
+  </Card.Section>
 
-      <Card.Section className={classes.section}>
-        <Group gap={30}>
-          <div>
-            <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
-              $168.00
-            </Text>
-            <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
-              per day
-            </Text>
-          </div>
+  <Group justify="space-between" mt="md">
+    <div>
+      <Text fw={500}>Deluxe King Room</Text>
+      <Text fz="xs" c="dimmed">
+        Room ID: #305
+      </Text>
+    </div>
+    <Badge variant="outline">15% off</Badge>
+  </Group>
 
-          <Button radius="xl" style={{ flex: 1 }}>
-            Rent now
-          </Button>
-        </Group>
-      </Card.Section>
-    </Card>
-    <Card withBorder radius="md" className={classes.card}>
-      <Card.Section className={classes.imageSection}>
-        <Image src="https://i.imgur.com/ZL52Q2D.png" alt="Tesla Model S" />
-      </Card.Section>
+  <Card.Section className={classes.section} mt="md">
+    <Text fz="sm" c="dimmed" className={classes.label}>
+      Room features
+    </Text>
 
-      <Group justify="space-between" mt="md">
-        <div>
-          <Text fw={500}>Tesla Model S</Text>
-          <Text fz="xs" c="dimmed">
-            Free recharge at any station
-          </Text>
-        </div>
-        <Badge variant="outline">25% off</Badge>
-      </Group>
+    <Group gap={8} mb={-8}>
+      <Badge variant="light">King Bed</Badge>
+      <Badge variant="light">Ocean View</Badge>
+      <Badge variant="light">Free WiFi</Badge>
+    </Group>
+  </Card.Section>
 
-      <Card.Section className={classes.section} mt="md">
-        <Text fz="sm" c="dimmed" className={classes.label}>
-          Basic configuration
+  <Card.Section className={classes.section}>
+    <Group gap={30}>
+      <div>
+        <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
+          $249.00
         </Text>
-
-        <Group gap={8} mb={-8}>
-          {features}
-        </Group>
-      </Card.Section>
-
-      <Card.Section className={classes.section}>
-        <Group gap={30}>
-          <div>
-            <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
-              $168.00
-            </Text>
-            <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
-              per day
-            </Text>
-          </div>
-
-          <Button radius="xl" style={{ flex: 1 }}>
-            Rent now
-          </Button>
-        </Group>
-      </Card.Section>
-    </Card>
-    <Card withBorder radius="md" className={classes.card}>
-      <Card.Section className={classes.imageSection}>
-        <Image src="https://i.imgur.com/ZL52Q2D.png" alt="Tesla Model S" />
-      </Card.Section>
-
-      <Group justify="space-between" mt="md">
-        <div>
-          <Text fw={500}>Tesla Model S</Text>
-          <Text fz="xs" c="dimmed">
-            Free recharge at any station
-          </Text>
-        </div>
-        <Badge variant="outline">25% off</Badge>
-      </Group>
-
-      <Card.Section className={classes.section} mt="md">
-        <Text fz="sm" c="dimmed" className={classes.label}>
-          Basic configuration
+        <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
+          per night
         </Text>
+      </div>
 
-        <Group gap={8} mb={-8}>
-          {features}
-        </Group>
-      </Card.Section>
+      <Button radius="xl" style={{ flex: 1 }}>
+        Book now
+      </Button>
+    </Group>
+  </Card.Section>
+</Card>
+<Card withBorder radius="md" className={classes.card}>
+  <Card.Section className={classes.imageSection}>
+    <Image src="https://img.freepik.com/free-photo/room-interior-hotel-bedroom_23-2150683419.jpg?t=st=1744066527~exp=1744070127~hmac=124fc2cc62794e1f3d39d01e6919ac7d6d0d50df8202b695bb56813f36ee175a&w=1380" alt="Luxury Hotel Room" />
+  </Card.Section>
 
-      <Card.Section className={classes.section}>
-        <Group gap={30}>
-          <div>
-            <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
-              $168.00
-            </Text>
-            <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
-              per day
-            </Text>
-          </div>
+  <Group justify="space-between" mt="md">
+    <div>
+      <Text fw={500}>Deluxe King Room</Text>
+      <Text fz="xs" c="dimmed">
+        Room ID: #305
+      </Text>
+    </div>
+    <Badge variant="outline">15% off</Badge>
+  </Group>
 
-          <Button radius="xl" style={{ flex: 1 }}>
-            Rent now
-          </Button>
-        </Group>
-      </Card.Section>
-    </Card>
+  <Card.Section className={classes.section} mt="md">
+    <Text fz="sm" c="dimmed" className={classes.label}>
+      Room features
+    </Text>
+
+    <Group gap={8} mb={-8}>
+      <Badge variant="light">King Bed</Badge>
+      <Badge variant="light">Ocean View</Badge>
+      <Badge variant="light">Free WiFi</Badge>
+    </Group>
+  </Card.Section>
+
+  <Card.Section className={classes.section}>
+    <Group gap={30}>
+      <div>
+        <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
+          $249.00
+        </Text>
+        <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
+          per night
+        </Text>
+      </div>
+
+      <Button radius="xl" style={{ flex: 1 }}>
+        Book now
+      </Button>
+    </Group>
+  </Card.Section>
+</Card>
+<Card withBorder radius="md" className={classes.card}>
+  <Card.Section className={classes.imageSection}>
+    <Image src="https://img.freepik.com/free-photo/room-interior-hotel-bedroom_23-2150683419.jpg?t=st=1744066527~exp=1744070127~hmac=124fc2cc62794e1f3d39d01e6919ac7d6d0d50df8202b695bb56813f36ee175a&w=1380" alt="Luxury Hotel Room" />
+  </Card.Section>
+
+  <Group justify="space-between" mt="md">
+    <div>
+      <Text fw={500}>Deluxe King Room</Text>
+      <Text fz="xs" c="dimmed">
+        Room ID: #305
+      </Text>
+    </div>
+    <Badge variant="outline">15% off</Badge>
+  </Group>
+
+  <Card.Section className={classes.section} mt="md">
+    <Text fz="sm" c="dimmed" className={classes.label}>
+      Room features
+    </Text>
+
+    <Group gap={8} mb={-8}>
+      <Badge variant="light">King Bed</Badge>
+      <Badge variant="light">Ocean View</Badge>
+      <Badge variant="light">Free WiFi</Badge>
+    </Group>
+  </Card.Section>
+
+  <Card.Section className={classes.section}>
+    <Group gap={30}>
+      <div>
+        <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
+          $249.00
+        </Text>
+        <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
+          per night
+        </Text>
+      </div>
+
+      <Button radius="xl" style={{ flex: 1 }}>
+        Book now
+      </Button>
+    </Group>
+  </Card.Section>
+</Card>
+<Card withBorder radius="md" className={classes.card}>
+  <Card.Section className={classes.imageSection}>
+    <Image src="https://img.freepik.com/free-photo/room-interior-hotel-bedroom_23-2150683419.jpg?t=st=1744066527~exp=1744070127~hmac=124fc2cc62794e1f3d39d01e6919ac7d6d0d50df8202b695bb56813f36ee175a&w=1380" alt="Luxury Hotel Room" />
+  </Card.Section>
+
+  <Group justify="space-between" mt="md">
+    <div>
+      <Text fw={500}>Deluxe King Room</Text>
+      <Text fz="xs" c="dimmed">
+        Room ID: #305
+      </Text>
+    </div>
+    <Badge variant="outline">15% off</Badge>
+  </Group>
+
+  <Card.Section className={classes.section} mt="md">
+    <Text fz="sm" c="dimmed" className={classes.label}>
+      Room features
+    </Text>
+
+    <Group gap={8} mb={-8}>
+      <Badge variant="light">King Bed</Badge>
+      <Badge variant="light">Ocean View</Badge>
+      <Badge variant="light">Free WiFi</Badge>
+    </Group>
+  </Card.Section>
+
+  <Card.Section className={classes.section}>
+    <Group gap={30}>
+      <div>
+        <Text fz="xl" fw={700} style={{ lineHeight: 1 }}>
+          $249.00
+        </Text>
+        <Text fz="sm" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={3}>
+          per night
+        </Text>
+      </div>
+
+      <Button radius="xl" style={{ flex: 1 }}>
+        Book now
+      </Button>
+    </Group>
+  </Card.Section>
+</Card>
     </div>
    
   );

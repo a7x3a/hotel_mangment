@@ -25,8 +25,18 @@ exports.registerUser = async (req, res) => {
 // User login
 exports.loginUser = async (req, res) => {
     try {
+        // Check for existing session more securely
         if (req.cookies.session_token) {
-            return res.status(500).json({ message: "Already logged in" });
+            try {
+                const decoded = jwt.verify(req.cookies.session_token, process.env.JWT_SECRET);
+                return res.status(400).json({ 
+                    message: "Already logged in",
+                    user: { id: decoded.id, role: decoded.role } // Don't return full user details
+                });
+            } catch (e) {
+                // If token is invalid, clear it and proceed with login
+                res.clearCookie('session_token');
+            }
         }
 
         const { username, password } = req.body;
@@ -34,40 +44,68 @@ exports.loginUser = async (req, res) => {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        const user = await User.findOne({ where: { username } });
-        if (!user) return res.status(400).json({ message: 'Invalid username or password' });
+        const user = await User.findOne({ 
+            where: { username },
+            attributes: { exclude: ['password'] } // Never select password in the first place
+        });
+        
+        if (!user) {
+            // Use the same message for both cases to prevent username enumeration
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
 
-        // Compare password with hashed password
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: 'Invalid username or password' });
+        // Need to explicitly get the hashed password for comparison
+        const userWithPassword = await User.findOne({
+            where: { username },
+            attributes: ['password']
+        });
 
-        // Generate JWT token
+        const isMatch = await bcrypt.compare(password, userWithPassword.password);
+        if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+
+        // Generate JWT token with minimal claims
         const token = jwt.sign(
-            { id: user.user_id, role: user.role },
+            { 
+                id: user.user_id, 
+                role: user.role,
+                // Add security-related claims
+                iss: 'your-app-name',
+                aud: 'your-app-client'
+            },
             process.env.JWT_SECRET,
-            { expiresIn: '1d' }
+            { 
+                expiresIn: '1d',
+                algorithm: 'HS256' // Explicitly specify algorithm
+            }
         );
 
-        // Remove password from the user object
-        const { password: _, ...userWithoutPassword } = user.dataValues;
-
-        // Set the cookie and send the response without the password
+        // Set secure cookie
         res.cookie('session_token', token, {
-            httpOnly: true, 
-            maxAge: 24 * 60 * 60 * 1000 // Cookie expires in 1 day
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+            sameSite: 'strict', // Prevent CSRF
+            maxAge: 24 * 60 * 60 * 1000,
+            path: '/',
+            domain: process.env.COOKIE_DOMAIN || undefined
         });
 
         return res.status(200).json({
             message: 'Login successful',
-            user: userWithoutPassword,  // Send the user object without the password
-            token
+            user: {
+                id: user.user_id,
+                name: user.name,
+                username: user.username,
+                role: user.role
+                // Only include necessary fields
+            }
+            // Don't send token in response body when using cookies
         });
 
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error('Login error:', error);
+        return res.status(500).json({ message: 'Authentication failed' }); // Generic error message
     }
 };
-
 
 // Get all users
 exports.getAllUsers = async (req, res) => {

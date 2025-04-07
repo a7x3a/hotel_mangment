@@ -14,8 +14,6 @@ export const loginUser = async (username, password) => {
 export const logoutUser = async () => {
     try {
         await API.post("/users/logout");
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
     } catch (error) {
         throw error.response ? error.response.data : error.message;
     }
