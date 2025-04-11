@@ -19,15 +19,15 @@ export const logoutUser = async () => {
     }
 };
 
-// Register function
-export const registerUser = async (name, username, password, role) => {
+// update function
+export const updateUser = async (id, userData) => {
     try {
-        const response = await API.post("/users/register", { name, username, password, role });
-        return response.data;
+      const response = await API.put(`/users/update/${id}`, userData);
+      return response.data;
     } catch (error) {
-        throw error.response ? error.response.data : error.message;
+      throw error.response ? error.response.data : error.message;
     }
-};
+  };;
 
 //Delete a User only if the user is an admin
 export const deleteUser = async (id) => {
@@ -39,15 +39,15 @@ export const deleteUser = async (id) => {
     }
 };
 
-//Update a User 
-export const updateUser = async (id, name, username, password, role) => {
+//register a User 
+export const registerUser = async (userData) => {
     try {
-        const response = await API.put(`/users/update/${id}`, { name, username, password, role });
-        return response.data;
+      const response = await API.post("/users/register", userData);
+      return response.data;
     } catch (error) {
-        throw error.response ? error.response.data : error.message;
+      throw error.response ? error.response.data : error.message;
     }
-};
+  };
 
 //Get all Users
 export const getUsers = async () => {

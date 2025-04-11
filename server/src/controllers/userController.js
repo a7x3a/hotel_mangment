@@ -5,9 +5,6 @@ const jwt = require('jsonwebtoken');
 // Register a new user (Admin or Cashier)
 exports.registerUser = async (req, res) => {
     try {
-        if (req.cookies.session_token) {
-            return res.status(500).json({ message: "already in" });
-        }
         const { name, username, password, role } = req.body;
         if(!name || !username || !password || !role){
             return res.status(400).json({ message: "All fields are required" });

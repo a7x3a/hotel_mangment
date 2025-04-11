@@ -9,7 +9,7 @@ const mockdata = [
   { label: 'Electric', icon: IconGasStation },
 ];
 
-export function Dashboard() {
+export default function Dashboard() {
   const features = mockdata.map((feature) => (
     <Center key={feature.label}>
       <feature.icon size={16} className={classes.icon} stroke={1.5} />

@@ -1,97 +1,136 @@
-import { useState ,useContext} from 'react';
+import { useState, useContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
-  IconCalendarStats,
-  IconDeviceDesktopAnalytics,
-  IconFingerprint,
-  IconGauge,
   IconHome2,
-  IconLogout,
-  IconSettings,
+  IconGauge,
+  IconBed,
+  IconUsers,
+  IconCalendar,
+  IconCash,
   IconUser,
+  IconSettings,
+  IconLogout,
   IconHexagon,
+  IconChartBar,
+  IconShieldLock,
+  IconReceipt
 } from '@tabler/icons-react';
 import { UserContext } from '../../context/userContext';
-import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../../utils/routes/users';
-import { Center, Stack, Tooltip, UnstyledButton, Loader } from '@mantine/core'; // Added Loader
+import { Center, Stack, Tooltip, UnstyledButton, Loader } from '@mantine/core';
 import classes from './Sidebar.module.css';
 import { useCookies } from 'react-cookie';
 
-function NavbarLink({ icon: Icon, label, active, onClick }) {
+function NavbarLink({ icon: Icon, label, active, path }) {
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+    navigate(path);
+  };
+
   return (
     <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
-      <UnstyledButton onClick={onClick} className={classes.link} data-active={active || undefined}>
+      <UnstyledButton 
+        onClick={handleClick} 
+        className={classes.link} 
+        data-active={active || undefined}
+        aria-label={label}
+      >
         <Icon size={20} stroke={1.5} />
       </UnstyledButton>
     </Tooltip>
   );
 }
 
-const mockdata = [
-  { icon: IconHome2, label: 'Home' },
-  { icon: IconGauge, label: 'Dashboard' },
-  { icon: IconDeviceDesktopAnalytics, label: 'Analytics' },
-  { icon: IconCalendarStats, label: 'Rooms' },
-  { icon: IconUser, label: 'Account' },
-  { icon: IconFingerprint, label: 'Security' },
-  { icon: IconSettings, label: 'Settings' },
+// Admin navigation links
+const adminLinks = [
+  { icon: IconGauge, label: 'Dashboard', path: '/admin/dashboard' },
+  { icon: IconBed, label: 'Rooms', path: '/admin/rooms' },
+  { icon: IconUsers, label: 'Cashiers', path: '/admin/users' },
+  { icon: IconUser, label: 'Profile', path: '/profile' },
+];
+
+// Cashier navigation links
+const cashierLinks = [
+  { icon: IconGauge, label: 'Dashboard', path: '/cashier/dashboard' },
+  { icon: IconUsers, label: 'Guests', path: '/cashier/guests' },
+  { icon: IconCalendar, label: 'Reservations', path: '/cashier/reservations' },
+  { icon: IconCash, label: 'Payments', path: '/cashier/payments' },
+  { icon: IconReceipt, label: 'Check In/Out', path: '/cashier/check-in-out' },
+  { icon: IconUser, label: 'Profile', path: '/profile' },
 ];
 
 export function Sidebar() {
-  const [active, setActive] = useState(2);
-  const {setUser} = useContext(UserContext); // Assuming you have a UserContext to manage user state
-  const [loading, setLoading] = useState(false);  // State for loading spinner
+  const location = useLocation();
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const { user, setUser } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
+  const [cookies, , removeCookie] = useCookies(['user']);
 
-  const handleLogout = () => {
-    setLoading(true);  // Start loading before the API call
-    logoutUser()
-      .then(() => {
-        removeCookie('user');  // Remove user cookie
-        setUser(null);  // Update user state in context
-        setLoading(false);  // Stop loading after the API call succeeds
-        navigate('/login');
-        console.log('Logout successful');
-      })
-      .catch((error) => {
-        setLoading(false);  // Stop loading if the API call fails
-        console.error('Logout failed:', error);
-        // Optionally, show a user-friendly error message here
-      });
+  // Get active link based on current route
+  const getActiveIndex = (links) => {
+    return links.findIndex(link => 
+      location.pathname === link.path || 
+      (link.path !== '/' && location.pathname.startsWith(`${link.path}/`))
+    );
+  };
+
+  const links = user?.role === 'Admin' ? adminLinks : cashierLinks;
+  const activeIndex = getActiveIndex(links);
+
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      await logoutUser();
+      removeCookie('user');
+      setUser(null);
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className='relative mr-20'>
-    <nav className={classes.navbar}>
-      <Center>
-        <IconHexagon opacity={'90%'} size={25}  color='black' cursor={'Pointer'} />
-      </Center>
-
-      <div className={classes.navbarMain}>
-        <Stack justify="center" gap={5}>
-          {mockdata.map((link, index) => (
-            <NavbarLink
-              {...link}
-              key={link.label}
-              active={index === active}
-              onClick={() => setActive(index)}
-            />
-          ))}
-        </Stack>
-      </div>
-
-      <Stack justify="center" gap={5}>
-        <NavbarLink icon={IconLogout} label="Logout" onClick={handleLogout} />
-      </Stack>
-
-      {/* Optional Loading Spinner */}
-      {loading && (
+      <nav className={classes.navbar}>
         <Center>
-          <Loader />
+          <IconHexagon 
+            opacity={'90%'} 
+            size={25}  
+            color='black' 
+            cursor={'pointer'} 
+            onClick={() => navigate(user?.role === 'Admin' ? '/admin/dashboard' : '/cashier/dashboard')}
+            aria-label="Home"
+          />
         </Center>
-      )}
-    </nav>
+
+        <div className={classes.navbarMain}>
+          <Stack justify="center" gap={5}>
+            {links.map((link, index) => (
+              <NavbarLink
+                {...link}
+                key={link.label}
+                active={index === activeIndex}
+              />
+            ))}
+          </Stack>
+        </div>
+
+        <Stack justify="center" gap={5}>
+          <Tooltip label="Logout" position="right" transitionProps={{ duration: 0 }}>
+            <UnstyledButton 
+              onClick={handleLogout} 
+              className={classes.link}
+              disabled={loading}
+              aria-label="Logout"
+            >
+              {loading ? <Loader size={20} /> : <IconLogout size={20} stroke={1.5} />}
+            </UnstyledButton>
+          </Tooltip>
+        </Stack>
+      </nav>
     </div>
   );
 }
