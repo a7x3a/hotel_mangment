@@ -10,11 +10,12 @@ const Payment = db.define('Payment', {
     },
     reservation_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,  // Changed from false to true to allow null values
         references: {
             model: Reservation,
-            key: 'reservation_id'
-        }
+            key: 'reservation_id',
+            onDelete: 'SET NULL'  // Changed from 'CASCADE' to 'SET NULL'
+        }   
     },
     amount_paid: {
         type: DataTypes.DECIMAL(10,2),

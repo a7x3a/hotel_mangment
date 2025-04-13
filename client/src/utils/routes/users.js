@@ -19,16 +19,24 @@ export const logoutUser = async () => {
     }
 };
 
-// update function
+// utils/routes/users.js
 export const updateUser = async (id, userData) => {
     try {
-      const response = await API.put(`/users/update/${id}`, userData);
-      return response.data;
+        const response = await API.put(`/users/update/${id}`, userData);
+        return response.data;
     } catch (error) {
-      throw error.response ? error.response.data : error.message;
+        // Handle specific error cases
+        if (error.response) {
+            if (error.response.status === 404) {
+                throw new Error('User not found');
+            }
+            if (error.response.data && error.response.data.error) {
+                throw new Error(error.response.data.error);
+            }
+        }
+        throw new Error(error.message || 'Failed to update user');
     }
-  };;
-
+};
 //Delete a User only if the user is an admin
 export const deleteUser = async (id) => {
     try {

@@ -1,5 +1,6 @@
 // components/admin/users.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../../../context/userContext';
 import {
   Table,
   Button,
@@ -14,7 +15,8 @@ import {
   Alert,
   PasswordInput,
   Space,
-  LoadingOverlay, Badge
+  LoadingOverlay,
+  Badge
 } from '@mantine/core';
 import { IconEdit, IconTrash, IconPlus, IconSearch, IconAlertCircle } from '@tabler/icons-react';
 import { getUsers, deleteUser, updateUser, registerUser } from '../../../utils/routes/users';
@@ -27,14 +29,16 @@ export default function Users() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { user: loggedInUser } = useContext(UserContext);
   const [formValues, setFormValues] = useState({
     name: '',
     username: '',
     password: '',
-    role: 'cashier'
+    role: 'Cashier'
   });
 
-  const roleOptions = ['admin', 'cashier'];
+
+  const roleOptions = ['Admin', 'Cashier'];
 
   useEffect(() => {
     fetchUsers();
@@ -76,7 +80,6 @@ export default function Users() {
     setError(null);
     try {
       if (currentUser) {
-        // Prepare update data with proper string values
         const updateData = {
           name: String(formValues.name),
           username: String(formValues.username),
@@ -90,7 +93,6 @@ export default function Users() {
           throw new Error(response.error);
         }
       } else {
-        // Prepare create data with proper string values
         const createData = {
           name: String(formValues.name),
           username: String(formValues.username),
@@ -219,7 +221,7 @@ export default function Users() {
               {filteredUsers.map((user) => (
                 <tr key={user.user_id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {user.name}
+                    {user.name} {user.user_id === loggedInUser.id && "(You)"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {user.username}
@@ -246,6 +248,7 @@ export default function Users() {
                         color="red"
                         onClick={() => handleDelete(user.user_id)}
                         variant="light"
+                        disabled={user.user_id === loggedInUser.id}
                       >
                         <IconTrash size={16} />
                       </ActionIcon>
@@ -296,13 +299,13 @@ export default function Users() {
             required={!currentUser}
             description={currentUser ? "Leave blank to keep current password" : ""}
           />
-
           <Select
             label="Role"
             data={roleOptions}
             value={formValues.role}
             onChange={(value) => handleInputChange('role', value)}
             required
+            disabled={currentUser?.user_id === loggedInUser.id}
           />
         </div>
 

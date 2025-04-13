@@ -31,7 +31,6 @@ exports.loginUser = async (req, res) => {
                     user: { id: decoded.id, role: decoded.role } // Don't return full user details
                 });
             } catch (e) {
-                // If token is invalid, clear it and proceed with login
                 res.clearCookie('session_token');
             }
         }
@@ -65,9 +64,6 @@ exports.loginUser = async (req, res) => {
             { 
                 id: user.user_id, 
                 role: user.role,
-                // Add security-related claims
-                iss: 'your-app-name',
-                aud: 'your-app-client'
             },
             process.env.JWT_SECRET,
             { 
@@ -132,13 +128,40 @@ exports.getUserById = async (req, res) => {
 // Update user details
 exports.updateUser = async (req, res) => {
     try {
-        const { name, username, role } = req.body;
+        const { name, username, role, password } = req.body;
         const user = await User.findByPk(req.params.id);
-        if (!user) return res.status(404).json({ message: 'user not found' });
-        await user.update({ name, username, role });
-        return res.status(200).json({ message: 'user updated successfully', user });
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Prepare update data
+        const updateData = {
+            name: name,
+            username: username,
+            role: role
+        };
+
+        // Only update password if provided and not empty
+        if (password && password.trim() !== '') {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            updateData.password = hashedPassword;
+        }
+
+        await user.update(updateData);
+        
+        // Return updated user data without password
+        const userData = user.get();
+        delete userData.password;
+        
+        return res.status(200).json({ 
+            user: userData 
+        });
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error('Update user error:', error);
+        return res.status(500).json({ 
+            error: error.message || 'Failed to update user' 
+        });
     }
 };
 

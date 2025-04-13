@@ -142,13 +142,13 @@ export default function Rooms() {
   return (
     <div className="container mx-auto ">
       <Card withBorder shadow="sm" className="rounded-lg">
-        <LoadingOverlay visible={loading} overlayBlur={2} />
-        
+        <LoadingOverlay visible={loading} overlayProps={{ blur: 2 }} />
+
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
           <Title order={2} className="text-2xl font-bold text-gray-800">
             Room Management
           </Title>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
             <TextInput
               icon={<IconSearch size={16} />}
@@ -158,7 +158,7 @@ export default function Rooms() {
               className="w-full md:w-64"
             />
             <Button
-              leftIcon={<IconPlus size={16} />}
+              leftSection={<IconPlus size={16} />}
               onClick={openCreateModal}
               className="bg-blue-600 hover:bg-blue-700 transition-colors"
             >
@@ -169,9 +169,9 @@ export default function Rooms() {
 
         {error && (
           <>
-            <Alert 
-              icon={<IconAlertCircle size={18} />} 
-              title="Error" 
+            <Alert
+              icon={<IconAlertCircle size={18} />}
+              title="Error"
               color="red"
               variant="outline"
               className="mb-4"
@@ -206,7 +206,7 @@ export default function Rooms() {
                     ${parseFloat(room.price).toFixed(2)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <Badge 
+                    <Badge
                       color={getStatusColor(room.status)}
                       variant="filled"
                       className="capitalize"
@@ -215,7 +215,7 @@ export default function Rooms() {
                     </Badge>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <Group spacing="xs" noWrap>
+                    <Group spacing="xs" >
                       <ActionIcon
                         color="blue"
                         onClick={() => openEditModal(room)}
@@ -240,7 +240,7 @@ export default function Rooms() {
               ))}
             </tbody>
           </Table>
-          
+
           {filteredRooms.length === 0 && (
             <div className="text-center py-8">
               <Text size="lg" color="dimmed">
@@ -256,7 +256,7 @@ export default function Rooms() {
         onClose={() => setOpened(false)}
         title={currentRoom ? "Edit Room" : "Create Room"}
         size="md"
-        overlayBlur={3}
+        overlayProps={{ blur: 2 }}
       >
         <div className="grid grid-cols-1 gap-4">
           <TextInput
@@ -267,7 +267,7 @@ export default function Rooms() {
             maxLength={10}
             description="Maximum 10 characters"
           />
-          
+
           <Select
             label="Room Type"
             data={roomTypeOptions}
@@ -275,7 +275,7 @@ export default function Rooms() {
             onChange={(value) => handleInputChange('room_type', value)}
             required
           />
-          
+
           <NumberInput
             label="Price"
             value={formValues.price}
@@ -291,23 +291,23 @@ export default function Rooms() {
                 : '$ '
             }
           />
-          
+
+
           <Select
             label="Status"
             data={roomStatusOptions}
             value={formValues.status}
-            style={{fontSize: '6px'}}
             onChange={(value) => handleInputChange('status', value)}
             required
+            styles={{ input: { whiteSpace: 'normal' }, root: { minWidth: 200 } }}
           />
         </div>
-        
         {error && (
           <>
             <Space h="md" />
-            <Alert 
-              icon={<IconAlertCircle size={18} />} 
-              title="Error" 
+            <Alert
+              icon={<IconAlertCircle size={18} />}
+              title="Error"
               color="red"
               variant="outline"
             >
@@ -315,16 +315,16 @@ export default function Rooms() {
             </Alert>
           </>
         )}
-        
+
         <Group position="right" mt="xl">
-          <Button 
-            onClick={() => setOpened(false)} 
+          <Button
+            onClick={() => setOpened(false)}
             variant="default"
             className="mr-2"
           >
             Cancel
           </Button>
-          <Button 
+          <Button
             onClick={handleSubmit}
             loading={loading}
             className="bg-blue-600 hover:bg-blue-700"

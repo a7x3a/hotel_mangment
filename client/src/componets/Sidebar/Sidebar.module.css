@@ -6,7 +6,9 @@
   display: flex;
   flex-direction: column; /* Stack items vertically */
   border-right: 1px solid var(--mantine-color-gray-3); /* Border for the sidebar */
-  @apply fixed z-100;
+  background-color: var(--mantine-color-blue-light-color);
+  color : #ffff;
+  @apply  fixed z-100;
 }
 
 .navbarMain {
@@ -22,24 +24,23 @@
   display: flex;
   align-items: center; /* Center icons vertically */
   justify-content: center; /* Center icons horizontally */
-  color: var(--mantine-color-gray-7); /* Default text color for the links */
   transition: background-color 0.3s, color 0.3s; /* Smooth transitions for hover effect */
 }
 
 /* Link hover styles */
 .link:hover {
   background-color: var(--mantine-color-gray-0); /* Background color on hover */
-  color: var(--mantine-color-dark-0); /* Change text color on hover */
+  color: var(--mantine-color-gray-3); /* Change text color on hover */
 }
 
 /* Active link styles */
 .link[data-active] {
-  background-color: var(--mantine-color-blue-light); /* Background color for active state */
+  background-color: #fff; /* Background color for active state */
   color: var(--mantine-color-blue-light-color); /* Text color for active link */
 }
 
 /* Active link hover styles */
 .link[data-active]:hover {
-  background-color: var(--mantine-color-blue-light); /* Keep the same active background color */
+  background-color: #ffff; /* Keep the same active background color */
   color: var(--mantine-color-blue-light-color); /* Keep the same active text color */
 }

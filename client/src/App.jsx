@@ -16,7 +16,6 @@ import Users from "./componets/Admin/Users/Users";
 import Guests from "./componets/Cashier/Guests/Guests";
 import Reservations from "./componets/Cashier/Reservations/Reservations";
 import Payments from "./componets/Cashier/Payments/Payments";
-import CheckInOut from "./componets/Cashier/CheckInOut/CheckInOut";
 
 // Shared Components
 import Profile from "./componets/Profile/Profile";
@@ -52,7 +51,6 @@ const App = () => {
             <Route path="/cashier/guests" element={<Guests />} />
             <Route path="/cashier/reservations" element={<Reservations />} />
             <Route path="/cashier/payments" element={<Payments />} />
-            <Route path="/cashier/check-in-out" element={<CheckInOut />} />
           </Route>
         </Route>
 

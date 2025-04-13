@@ -165,12 +165,12 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
         <Card withBorder p="lg" radius="md">
           <Text size="lg" weight={500} className="mb-4">Room Types</Text>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 pt-4">
             {Object.entries(stats.roomTypes).map(([type, count]) => (
               <Badge
                 key={type}
                 variant="filled"
-                size="lg"
+                size="xl"
                 className="mb-2"
               >
                 {type}: {count}

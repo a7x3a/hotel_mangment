@@ -1,19 +1,14 @@
 import { useState, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
-  IconHome2,
   IconGauge,
   IconBed,
   IconUsers,
   IconCalendar,
   IconCash,
   IconUser,
-  IconSettings,
   IconLogout,
   IconHexagon,
-  IconChartBar,
-  IconShieldLock,
-  IconReceipt
 } from '@tabler/icons-react';
 import { UserContext } from '../../context/userContext';
 import { logoutUser } from '../../utils/routes/users';
@@ -47,7 +42,6 @@ const adminLinks = [
   { icon: IconGauge, label: 'Dashboard', path: '/admin/dashboard' },
   { icon: IconBed, label: 'Rooms', path: '/admin/rooms' },
   { icon: IconUsers, label: 'Cashiers', path: '/admin/users' },
-  { icon: IconUser, label: 'Profile', path: '/profile' },
 ];
 
 // Cashier navigation links
@@ -56,7 +50,6 @@ const cashierLinks = [
   { icon: IconUsers, label: 'Guests', path: '/cashier/guests' },
   { icon: IconCalendar, label: 'Reservations', path: '/cashier/reservations' },
   { icon: IconCash, label: 'Payments', path: '/cashier/payments' },
-  { icon: IconReceipt, label: 'Check In/Out', path: '/cashier/check-in-out' },
   { icon: IconUser, label: 'Profile', path: '/profile' },
 ];
 
@@ -93,13 +86,13 @@ export function Sidebar() {
   };
 
   return (
-    <div className='relative mr-20'>
+    <div className='relative  mr-20'>
       <nav className={classes.navbar}>
-        <Center>
+        <Center pt={10} >
           <IconHexagon 
             opacity={'90%'} 
-            size={25}  
-            color='black' 
+            size={24}  
+            color='white' 
             cursor={'pointer'} 
             onClick={() => navigate(user?.role === 'Admin' ? '/admin/dashboard' : '/cashier/dashboard')}
             aria-label="Home"
