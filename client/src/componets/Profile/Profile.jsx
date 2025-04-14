@@ -153,74 +153,89 @@ export default function Profile() {
   }
 
   return (
-    <div className="container">
-      <Card withBorder shadow="sm" className="rounded-lg">
-        <LoadingOverlay visible={loading} overlayProps={{ blur: 2 }} />
+<div className="max-w-4xl mx-auto p-4">
+  <Card 
+    withBorder 
+    shadow="sm" 
+    className="rounded-xl min-h-[calc(100dvh-2rem)] flex flex-col"
+    padding="lg"
+  >
+    <LoadingOverlay visible={loading} overlayProps={{ blur: 2 }} />
 
-        <Title order={2} className="text-2xl font-bold text-gray-800 mb-6">
+    <div className="flex-1 flex flex-col">
+      <div className="text-center mb-8">
+        <Title order={2} className="text-3xl font-bold text-gray-800">
           User Profile
         </Title>
+        <Text c="dimmed" className="mt-2">Manage your account information</Text>
+      </div>
 
-        {error && (
-          <>
-            <Alert
-              icon={<IconAlertCircle size={18} />}
-              title="Error"
-              color="red"
-              variant="outline"
-              className="mb-4"
-            >
-              {error}
-            </Alert>
-            <Space h="md" />
-          </>
-        )}
+      {error && (
+        <Alert
+          icon={<IconAlertCircle size={18} />}
+          title="Error"
+          color="red"
+          variant="light"
+          className="mb-6"
+          withCloseButton
+          onClose={() => setError('')}
+        >
+          {error}
+        </Alert>
+      )}
 
-        {success && (
-          <>
-            <Alert
-              icon={<IconCheck size={18} />}
-              title="Success"
-              color="green"
-              variant="outline"
-              className="mb-4"
-            >
-              {success}
-            </Alert>
-            <Space h="md" />
-          </>
-        )}
+      {success && (
+        <Alert
+          icon={<IconCheck size={18} />}
+          title="Success"
+          color="teal"
+          variant="light"
+          className="mb-6"
+          withCloseButton
+          onClose={() => setSuccess('')}
+        >
+          {success}
+        </Alert>
+      )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div>
-            <Text size="sm" c="dimmed">Name</Text>
-            <Text size="lg">{profile.name}</Text>
-          </div>
-          <div>
-            <Text size="sm" c="dimmed">Username</Text>
-            <Text size="lg">{profile.username}</Text>
-          </div>
-          <div>
-            <Text size="sm" c="dimmed">Role</Text>
-            <Badge
-              color={getRoleBadge(profile.role)}
-              variant="filled"
-              size="lg"
-            >
-              {profile.role}
-            </Badge>
-          </div>
-          <div>
-            <Text size="sm" c="dimmed">User ID</Text>
-            <Text size="lg">{profile.user_id}</Text>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <Text size="sm" c="dimmed" className="mb-1">Name</Text>
+          <Text size="lg" fw={500}>{profile.name}</Text>
         </div>
+        
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <Text size="sm" c="dimmed" className="mb-1">Username</Text>
+          <Text size="lg" fw={500}>{profile.username}</Text>
+        </div>
+        
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <Text size="sm" c="dimmed" className="mb-1">Role</Text>
+          <Badge
+            color={getRoleBadge(profile.role)}
+            variant="light"
+            size="lg"
+            radius="sm"
+            className="text-sm"
+          >
+            {profile.role}
+          </Badge>
+        </div>
+        
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <Text size="sm" c="dimmed" className="mb-1">User ID</Text>
+          <Text size="lg" fw={500} className="font-mono">{profile.user_id}</Text>
+        </div>
+      </div>
 
-        <Group gap="sm" mt="xl">
+      <div className="mt-auto">
+        <Group justify="center" gap="md" grow className="flex-col sm:flex-row">
           <Button
             onClick={openEditModal}
             leftSection={<IconEdit size={16} />}
             variant="light"
+            size="md"
+            className="hover:bg-blue-50"
           >
             Edit Profile
           </Button>
@@ -228,6 +243,7 @@ export default function Profile() {
             onClick={handleLogout}
             variant="outline"
             color="gray"
+            size="md"
           >
             Logout
           </Button>
@@ -240,82 +256,96 @@ export default function Profile() {
             leftSection={<IconTrash size={16} />}
             variant="outline"
             color="red"
+            size="md"
           >
             Delete Account
           </Button>
         </Group>
-      </Card>
-
-      <Modal
-        opened={opened}
-        onClose={() => setOpened(false)}
-        title="Edit Profile"
-        size="md"
-        overlayProps={{ blur: 3 }}
-      >
-        <div className="grid grid-cols-1 gap-4">
-          <TextInput
-            label="Full Name"
-            value={formValues.name}
-            onChange={(e) => handleInputChange('name', e.target.value)}
-            required
-          />
-
-          <TextInput
-            label="Username"
-            value={formValues.username}
-            onChange={(e) => handleInputChange('username', e.target.value)}
-            required
-          />
-
-
-
-          <PasswordInput
-            label="New Password (leave blank to keep current)"
-            value={formValues.password}
-            onChange={(e) => handleInputChange('password', e.target.value)}
-          />
-
-          {formValues.password && (
-            <PasswordInput
-              label="Confirm New Password"
-              value={formValues.confirmPassword}
-              onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-            />
-          )}
-        </div>
-
-        {error && (
-          <>
-            <Space h="md" />
-            <Alert
-              icon={<IconAlertCircle size={18} />}
-              title="Error"
-              color="red"
-              variant="outline"
-            >
-              {error}
-            </Alert>
-          </>
-        )}
-
-        <Group justify="flex-end" mt="xl">
-          <Button
-            onClick={() => setOpened(false)}
-            variant="default"
-            className="mr-2"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            loading={loading}
-            leftSection={<IconCheck size={16} />}
-          >
-            Save Changes
-          </Button>
-        </Group>
-      </Modal>
+      </div>
     </div>
+  </Card>
+
+  <Modal
+    opened={opened}
+    onClose={() => setOpened(false)}
+    title={<Text fw={600} size="lg">Edit Profile</Text>}
+    size="md"
+    overlayProps={{ blur: 3 }}
+    radius="md"
+  >
+    <div className="space-y-4">
+      <TextInput
+        label="Full Name"
+        value={formValues.name}
+        onChange={(e) => handleInputChange('name', e.target.value)}
+        required
+        radius="md"
+        size="md"
+      />
+
+      <TextInput
+        label="Username"
+        value={formValues.username}
+        onChange={(e) => handleInputChange('username', e.target.value)}
+        required
+        radius="md"
+        size="md"
+      />
+
+      <PasswordInput
+        label="New Password (leave blank to keep current)"
+        value={formValues.password}
+        onChange={(e) => handleInputChange('password', e.target.value)}
+        radius="md"
+        size="md"
+      />
+
+      {formValues.password && (
+        <PasswordInput
+          label="Confirm New Password"
+          value={formValues.confirmPassword}
+          onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+          radius="md"
+          size="md"
+        />
+      )}
+    </div>
+
+    {error && (
+      <Alert
+        icon={<IconAlertCircle size={18} />}
+        title="Error"
+        color="red"
+        variant="light"
+        className="mt-4"
+        withCloseButton
+        onClose={() => setError('')}
+      >
+        {error}
+      </Alert>
+    )}
+
+    <Group justify="flex-end" mt="xl" gap="sm">
+      <Button
+        onClick={() => setOpened(false)}
+        variant="default"
+        radius="md"
+        size="md"
+      >
+        Cancel
+      </Button>
+      <Button
+        onClick={handleSubmit}
+        loading={loading}
+        leftSection={!loading && <IconCheck size={16} />}
+        radius="md"
+        size="md"
+        className="bg-blue-600 hover:bg-blue-700"
+      >
+        Save Changes
+      </Button>
+    </Group>
+  </Modal>
+</div>
   );
 }

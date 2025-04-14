@@ -14,22 +14,20 @@ import {
   LoadingOverlay,
   Badge,
   Space,
-  NumberInput,
   Divider
 } from '@mantine/core';
-import { IconEdit, IconTrash, IconPlus, IconSearch, IconAlertCircle, IconReceipt } from '@tabler/icons-react';
+import { IconEdit, IconTrash, IconPlus, IconSearch, IconAlertCircle } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../context/userContext';
 import {
   getAllReservations,
-  getReservationById,
   createReservation,
   updateReservation,
   deleteReservation
 } from '../../../utils/routes/reservations';
 import { getAllGuests } from '../../../utils/routes/guests';
 import { getRooms } from '../../../utils/routes/rooms';
-import { createPayment, getPaymentsByReservationId, updatePayment, deletePayment } from '../../../utils/routes/payments';
+import { createPayment, deletePayment } from '../../../utils/routes/payments';
 
 export default function Reservations() {
   const { user } = useContext(UserContext);
@@ -45,7 +43,6 @@ export default function Reservations() {
   const [error, setError] = useState(null);
   const [guests, setGuests] = useState([]);
   const [rooms, setRooms] = useState([]);
-  const [payment, setPayment] = useState(null);
   
   const [formValues, setFormValues] = useState({
     guest_id: '',
@@ -58,22 +55,11 @@ export default function Reservations() {
     status: 'Pending'
   });
 
-  const [paymentForm, setPaymentForm] = useState({
-    amount_paid: 0,
-    payment_method: 'Cash',
-    payment_date: new Date().toISOString().split('T')[0],
-  });
-
   const statusOptions = [
     { value: 'Pending', label: 'Pending' },
     { value: 'Confirmed', label: 'Confirmed' },
     { value: 'Cancelled', label: 'Cancelled' }
   ];
-
-  const paymentMethodOptions = [
-    { value: 'Cash', label: 'Cash' },
-  ];
-
 
   useEffect(() => {
     fetchData();
@@ -138,26 +124,6 @@ export default function Reservations() {
     }
   };
 
-  const fetchPayment = async (reservationId) => {
-    try {
-      const data = await getPaymentsByReservationId(reservationId);
-      if (data) {
-        setPayment(data);
-        setPaymentForm({
-          amount_paid: data.amount_paid,
-          payment_method: data.payment_method,
-          payment_date: formatDateForInput(data.payment_date),
-          status: data.status
-        });
-      } else {
-        setPayment(null);
-      }
-    } catch (err) {
-      console.error('Error fetching payment:', err);
-      setPayment(null);
-    }
-  };
-
   const formatDateForInput = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -190,27 +156,12 @@ export default function Reservations() {
       
       if (room && days > 0) {
         updatedValues.total_price = (days * room.price).toFixed(2);
-        setPaymentForm(prev => ({
-          ...prev,
-          amount_paid: (days * room.price).toFixed(2)
-        }));
       } else {
         updatedValues.total_price = 0;
-        setPaymentForm(prev => ({
-          ...prev,
-          amount_paid: 0
-        }));
       }
     }
 
     setFormValues(updatedValues);
-  };
-
-  const handlePaymentInputChange = (name, value) => {
-    setPaymentForm(prev => ({
-      ...prev,
-      [name]: value
-    }));
   };
 
   const handleSubmit = async () => {
@@ -224,43 +175,29 @@ export default function Reservations() {
           !formValues.total_price || !formValues.status) {
         throw new Error('All fields are required');
       }
-
+  
       // Validate dates
       if (new Date(formValues.check_out) <= new Date(formValues.check_in)) {
         throw new Error('Check-out date must be after check-in date');
       }
-
+  
       let reservation;
       if (currentReservation) {
         // Update existing reservation
         reservation = await updateReservation(currentReservation.reservation_id, formValues);
-        
-        // Update payment if exists
-        if (payment) {
-          await updatePayment(payment.payment_id, {
-            ...paymentForm,
-            amount_paid: formValues.total_price
-          });
-        } else {
-          // Create payment if doesn't exist
-          await createPayment({
-            reservation_id: currentReservation.reservation_id,
-            amount_paid: formValues.total_price,
-            payment_method: paymentForm.payment_method,
-            payment_date: paymentForm.payment_date,
-          });
-        }
       } else {
         // Create new reservation
         reservation = await createReservation(formValues);
-        
-        // Create initial payment record
-        await createPayment({
-          reservation_id: reservation.reservation_id,
-          amount_paid: formValues.total_price,
-          payment_method: paymentForm.payment_method,
-          payment_date: paymentForm.payment_date,
-        });
+        // Create initial payment record in the backend with the reservation_id
+        if (reservation && reservation.reservation.reservation_id) {
+          await createPayment({
+            reservation_id: reservation.reservation.reservation_id, // Make sure this is included
+            amount_paid: formValues.total_price,
+            payment_date: new Date().toISOString().split('T')[0],
+          });
+        } else {
+          throw new Error('Failed to get reservation ID after creation');
+        }
       }
       
       setOpened(false);
@@ -273,19 +210,15 @@ export default function Reservations() {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (reservationId) => {
     setLoading(true);
     setError(null);
     try {
-      if (window.confirm('Are you sure you want to delete this reservation and its payment?')) {
-        // First delete payment if exists
-        const paymentToDelete = await getPaymentsByReservationId(id);
-        if (paymentToDelete) {
-          await deletePayment(paymentToDelete.payment_id);
-        }
-        
-        // Then delete reservation
-        await deleteReservation(id);
+      if (window.confirm('Are you sure you want to delete this reservation?')) {
+        // First delete the payment by reservation ID
+        await deletePayment(reservationId);
+        // Then delete the reservation
+        await deleteReservation(reservationId);
         await fetchReservations();
       }
     } catch (err) {
@@ -309,14 +242,11 @@ export default function Reservations() {
       status: reservation.status
     });
     
-    // Fetch payment data when opening modal
-    await fetchPayment(reservation.reservation_id);
     setOpened(true);
   };
 
   const openCreateModal = () => {
     setCurrentReservation(null);
-    setPayment(null);
     setFormValues({
       guest_id: '',
       user_id: user?.id || '',
@@ -326,11 +256,6 @@ export default function Reservations() {
       start_from: new Date().toISOString().split('T')[0],
       total_price: 0,
       status: 'Pending'
-    });
-    setPaymentForm({
-      amount_paid: 0,
-      payment_method: 'Cash',
-      payment_date: new Date().toISOString().split('T')[0],
     });
     setOpened(true);
   };
@@ -345,7 +270,7 @@ export default function Reservations() {
   };
 
   return (
-    <div className="container">
+    <div>
       <Card withBorder shadow="sm" className="rounded-lg">
         <LoadingOverlay visible={loading} overlayProps={{ blur: 2 }} />
 
@@ -372,20 +297,7 @@ export default function Reservations() {
           </div>
         </div>
 
-        {error && (
-          <>
-            <Alert
-              icon={<IconAlertCircle size={18} />}
-              title="Error"
-              color="red"
-              variant="outline"
-              className="mb-4"
-            >
-              {error}
-            </Alert>
-            <Space h="md" />
-          </>
-        )}
+  
 
         <div className="overflow-x-auto">
           <Table striped highlightOnHover className="min-w-full">
@@ -402,7 +314,7 @@ export default function Reservations() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredReservations.map((reservation) => {
+              {!error && filteredReservations.map((reservation) => {
                 const guest = guests.find(g => g.guest_id === reservation.guest_id);
                 const room = rooms.find(r => r.room_id === reservation.room_id);
                 const days = calculateDaysBetweenDates(reservation.check_in, reservation.check_out);
@@ -564,37 +476,6 @@ export default function Reservations() {
               data={statusOptions}
               value={formValues.status}
               onChange={(value) => handleInputChange('status', value)}
-              required
-            />
-          </div>
-
-          {/* Payment Information Section */}
-          <div className="md:col-span-2 space-y-4">
-            <Divider my="md" />
-            <Text size="lg" weight={500}>Payment Information</Text>
-            
-            <NumberInput
-              label="Amount Paid"
-              value={paymentForm.amount_paid}
-              onChange={(value) => handlePaymentInputChange('amount_paid', value)}
-              precision={2}
-              min={0}
-              required
-            />
-
-            <Select
-              label="Payment Method"
-              data={paymentMethodOptions}
-              value={paymentForm.payment_method}
-              onChange={(value) => handlePaymentInputChange('payment_method', value)}
-              required
-            />
-
-            <TextInput
-              label="Payment Date"
-              type="date"
-              value={paymentForm.payment_date}
-              onChange={(e) => handlePaymentInputChange('payment_date', e.target.value)}
               required
             />
           </div>

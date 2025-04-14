@@ -86,16 +86,16 @@ exports.createReservation = async (req, res) => {
 
         // Create the reservation
         const newReservation = await Reservation.create({
-            guest_id,
-            user_id,
-            room_id,
+            guest_id: Number(guest_id),
+            user_id: Number(user_id),
+            room_id: Number(room_id),
             check_in,
             check_out,
             start_from,
-            total_price,
+            total_price: Number(total_price),
             status
         });
-
+        console.log(newReservation)
         return res.status(201).json({ message: "Reservation created successfully!", reservation: newReservation });
     } catch (error) {
         console.error("Error creating reservation:", error);

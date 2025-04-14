@@ -14,21 +14,7 @@ exports.getAllPayments = async (req, res) => {
         return res.status(500).json({ message: 'Error fetching payments' });
     }
 }
-//Getting Payment Record By reservation id
-exports.getPaymentByReservationId = async (req, res) => {
-    const { reservation_id } = req.params;
-    try {   
-        const payment = await Payment.findOne({ where: { reservation_id } });
-        if (payment) {
-            return res.json(payment);
-        } else {
-            return res.status(404).json({ message: 'No payment record found for this reservation ID' });
-        }
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Error fetching payment' });
-    }
-}
+
 //Getting Payment Record By its Id
 exports.getPaymentById = async (req, res) => {
     const {id} = req.params;
@@ -58,27 +44,33 @@ exports.createPayment = async (req, res) => {
 
 // Delete Payment
 exports.deletePayment = async (req, res) => {
-    const { id } = req.params;
+    const { reservationId } = req.params;
     try {
-        const payment = await Payment.findByPk(id);
-        if (!payment) {
+        const payments = await Payment.findAll({
+            where: { reservation_id: reservationId }
+        });
+
+        if (!payments || payments.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: `Payment with ID ${id} not found`
+                message: `No payments found for reservation ID ${reservationId}`
             });
         }
 
-        await payment.destroy();
+        await Payment.destroy({
+            where: { reservation_id: reservationId }
+        });
 
         return res.status(200).json({
             success: true,
-            message: `Payment with ID ${id} deleted successfully`
+            message: `Payment(s) deleted successfully`,
+            data: { reservationId, count: payments.length }
         });
     } catch (error) {
-        console.error(`Error deleting payment ${id}:`, error);
+        console.error(`Error deleting payments:`, error);
         return res.status(500).json({
             success: false,
-            message: 'Failed to delete payment',
+            message: 'Failed to delete payment(s)',
             error: error.message
         });
     }

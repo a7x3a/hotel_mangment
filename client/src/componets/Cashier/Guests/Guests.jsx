@@ -142,7 +142,7 @@ export default function Guests() {
   };
 
   return (
-    <div className="container">
+    <div>
       <Card withBorder shadow="sm" className="rounded-lg">
         <LoadingOverlay visible={loading} overlayProps={{ blur: 2 }} />
 

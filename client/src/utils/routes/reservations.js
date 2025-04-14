@@ -22,12 +22,18 @@ export const getReservationById = async (id) => {
 };
 
 // Create a new reservation
-export const createReservation = async (reservationData) => {
+export const createReservation = async (data) => {
   try {
-    const response = await API.post("/reservations/create", reservationData);
+    const response = await API.post('/reservations/create', data, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
     return response.data;
   } catch (error) {
-    throw error.response ? error.response.data : error.message;
+    console.error('Error creating reservation:', error.response?.data || error.message);
+    throw error;
   }
 };
 

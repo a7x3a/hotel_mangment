@@ -31,27 +31,16 @@ export const createPayment = async (paymentData) => {
   }
 };
 
-//delete payment
-export const deletePayment = async (id) => {
+// Delete a payment
+export const deletePayment = async (reservationId) => {
   try {
-    const response = await API.delete(`/payments/${id}`);
+    const response = await API.delete(`/payments/reservation/${reservationId}`);
     return response.data;
   } catch (error) {
     throw error.response ? error.response.data : error.message;
   }
-};  
+};
 
-//get payment by user id
-export const getPaymentsByReservationId = async (reservationId) => {
-  try {
-    const response = await API.get(`/payments/reservation/${reservationId}`);
-    return response.data;
-
-  }
-  catch (error) {
-    throw error.response ? error.response.data : error.message;
-  }
-}
 
 //update payment
 export const updatePayment = async (id, paymentData) => {
