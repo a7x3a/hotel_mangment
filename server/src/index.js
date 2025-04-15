@@ -2,8 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
-const chalk = require('chalk');
-require('./schema');;//index-schema is the file that contains all the schemas
+require('./schema');;
 const userRoutes = require('./routes/userRoutes');
 const guestRoutes = require('./routes/guestRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');  
@@ -30,9 +29,8 @@ app.use('/reservations', reservationRoutes);
 
 // Start server
 app.listen(port, () => {
-  // Use ANSI escape codes to style the text
-  console.log('\x1b[32m\x1b[1mServer is up and running! 🚀\x1b[0m'); // Green and bold
-  console.log('\x1b[34m\x1b[1mListening on port \x1b[35m' + port + '\x1b[0m'); // Blue and bold for "Listening", magenta for port
-  console.log('\x1b[35mReady 🌍💻\x1b[0m'); // Magenta
+  console.log('\x1b[32m\x1b[1mServer is up and running! 🚀\x1b[0m'); 
+  console.log('\x1b[34m\x1b[1mListening on port \x1b[35m' + port + '\x1b[0m'); 
+  console.log('\x1b[35mReady 🌍💻\x1b[0m');
 });
 

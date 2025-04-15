@@ -9,12 +9,10 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
 
-  // Initialize user from cookies on first load
   useEffect(() => {
     if (cookies.user) {
       setUser(cookies.user.user);
       setToken(cookies.user.token);
-      // Store token in localStorage/sessionStorage for API requests
       if (cookies.user.remember) {
         localStorage.setItem('token', cookies.user.token);
       } else {
@@ -26,10 +24,8 @@ export const UserProvider = ({ children }) => {
   const updateUser = (userData, token, remember = false) => {
     setUser(userData);
     setToken(token);
-    const options = remember ? { maxAge: 60 * 60 * 24  } : {};
+    const options = remember ? { maxAge: 60 * 60 * 24 } : {};
     setCookie('user', { user: userData, token, remember }, options);
-    
-    // Store token appropriately
     if (remember) {
       localStorage.setItem('token', token);
       sessionStorage.removeItem('token');
